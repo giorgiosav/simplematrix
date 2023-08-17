@@ -1,5 +1,7 @@
 
 #include <cassert>
+// #include <iostream>
+
 #include "simplematrix.h"
 
 
@@ -13,6 +15,18 @@ namespace SimpleMatrix {
         Matrix m(nrows, ncols);
         memset(m._storage.get(), 0, sizeof(double) * nrows * ncols);
         return m;
+    }
+
+    ostream& operator<<(ostream& out, Matrix const& m) {
+
+        for (int i = 0; i < m.nrows(); ++i) {
+            for(int j = 0; j < m.ncols(); ++j) {
+                out << m(i, j) << " ";
+            }
+            out << '\n';
+        }
+
+        return out;
     }
 
     Matrix::Matrix(int nrows, int ncols) :
@@ -74,8 +88,8 @@ namespace SimpleMatrix {
         assert(other.nrows() == _nrows && other.ncols() == _ncols);
 
         for (int i = 0; i < _nrows; ++i) {
-            for(int j = 0; j < _nrows; ++j) {
-                _storage[i * _ncols + j] += other(i, j);
+            for(int j = 0; j < _ncols; ++j) {
+                this->operator()(i, j) += other(i, j);
             }
         }
     }
@@ -117,6 +131,18 @@ namespace SimpleMatrix {
         Matrix m = this->clone();
         m *= s;
         return m;
+    }
+
+    bool Matrix::operator==(Matrix const& other) const {
+        if (_ncols != other.ncols() || _nrows != other.nrows()) {
+            return false;
+        }
+
+        for (int i = 0; i < _nrows * _ncols; ++i) {
+            if (_storage[i] != other._storage[i]) return false;
+        }
+
+        return true;
     }
             
 

@@ -4,10 +4,12 @@
 #include <type_traits>
 #include <memory>
 #include <initializer_list>
+#include <ostream>
 
 namespace SimpleMatrix {
     using std::unique_ptr;
     using std::initializer_list;
+    using std::ostream;
 
     class Matrix {
         public:
@@ -25,6 +27,7 @@ namespace SimpleMatrix {
             void operator*=(double s);
             Matrix operator*(double s);
             
+            bool operator==(Matrix const& other) const;
             Matrix clone() const;
             
             friend Matrix zeros(int nrows, int ncols);
@@ -35,7 +38,9 @@ namespace SimpleMatrix {
 
     };
 
+    Matrix zeros(int nrows, int ncols);
     Matrix new_like(Matrix const& other);
+    ostream& operator<<(ostream& out, Matrix const& m);
     
 }
 
